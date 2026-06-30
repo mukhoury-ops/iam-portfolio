@@ -1,6 +1,7 @@
 # Lab 01 — LDAP Least-Privilege Group Policy
 
 **Tools:** LLDAP (Light LDAP) directory server · LDAP authentication endpoint · web-based identity management console
+
 **Domains:** Identity & Access Management · Role-Based Access Control (RBAC) · Access Governance
 
 ---
