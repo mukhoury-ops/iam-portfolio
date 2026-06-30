@@ -75,10 +75,20 @@ policy — a daily IAM job function.
 
 ## Artifacts
 
+**The group and its membership**
+
 | Screenshot | What it shows |
 |------------|---------------|
-| ![Read-only group](screenshots/01-group-soc-tier1-readonly.png) | The `soc-tier1-readonly` group — least-privilege group created |
-| ![Group membership](screenshots/02-membership-analyst1.png) | `analyst1` assigned to `soc-tier1-readonly` (access by membership) |
-| ![Least privilege proven](screenshots/03-analyst1-no-admin-tabs.png) | `analyst1` logged in — admin tabs absent, proving least privilege |
+| ![Read-only group](screenshots/01-group-soc-tier1-readonly.png) | The `soc-tier1-readonly` group with `analyst1` listed as a member — the least-privilege group, created |
+| ![Group membership](screenshots/02-membership-analyst1.png) | The same relationship from the user side: `analyst1`'s **Group memberships** show only `soc-tier1-readonly` |
 
-*Lab values (`analyst1`, `soc-tier1-readonly`) are non-production training data.*
+**The proof — same directory, two privilege levels (before / after)**
+
+| `analyst1` (non-privileged) | `admin` (superuser) |
+|------------------------------|----------------------|
+| ![analyst1 — no admin tabs](screenshots/03-analyst1-no-admin-tabs.png) | ![admin — all tabs present](screenshots/04-admin-with-tabs.png) |
+| Logged in successfully (AuthN passed), but the nav bar shows **no admin tabs** — no Users, Groups, User schema, or Group schema. Zero administrative authority (AuthZ denied). | The bootstrap admin sees **all four admin tabs** and the full user list with create/delete controls. |
+
+The side-by-side is the whole point: **same directory, same login flow — the only difference is group membership, and that alone determines the entire authorization surface.**
+
+*Lab values (`analyst1`, `soc-tier1-readonly`, the `172.19.0.3` container IP) are non-production training data.*
