@@ -27,6 +27,36 @@ This separates **authentication (AuthN — verifying who you are)** from **autho
 (AuthZ — what you're allowed to do)**, which is the core control behind access
 certification and periodic access reviews.
 
+### How the directory is structured
+
+```mermaid
+flowchart LR
+    subgraph Users["Identities"]
+        admin["admin<br/>(bootstrap superuser /<br/>break-glass only)"]
+        analyst["analyst1<br/>(non-privileged)"]
+    end
+
+    subgraph Groups["Groups (privilege is driven by membership)"]
+        adminGrp["lldap_admin<br/>full administrative authority"]
+        readonly["soc-tier1-readonly<br/>read visibility, no admin changes"]
+    end
+
+    admin -->|member of| adminGrp
+    analyst -->|member of| readonly
+
+    subgraph Planes["Where policy lives vs. where it's enforced"]
+        ui[":17170 — web console<br/>CONTROL PLANE<br/>(policy is configured here)"]
+        ldap[":3890 — LDAP bind endpoint<br/>ENFORCEMENT PLANE<br/>(apps authenticate here)"]
+    end
+
+    adminGrp -.->|grants admin tabs| ui
+    readonly -.->|read-only, no admin tabs| ui
+```
+
+**Read it as:** an identity's effective authority comes entirely from the group it belongs
+to. Move `analyst1` into `lldap_admin` and it gains the admin surface; keep it in
+`soc-tier1-readonly` and it stays read-only — no per-user permission editing required.
+
 ## Steps
 
 1. **Mapped the IAM/LDAP surface.** Identified the two endpoints and their roles: the web
